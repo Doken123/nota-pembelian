@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NotaKu</title>
+<title>NotaKu - DOKEN STORE</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -256,9 +254,7 @@ input:focus{
 }
 
 
-/* =========================
-   NOTA
-========================= */
+/* NOTA */
 
 #receipt{
     position:absolute;
@@ -369,12 +365,10 @@ input:focus{
 
 <div class="logo">
 
-<div class="logo-icon">
-🧾
-</div>
+<div class="logo-icon">NOTA</div>
 
 <div>
-<h1>NotaKu</h1>
+<h1>DOKEN STORE</h1>
 <p>buat nota jadi lebih simpel</p>
 </div>
 
@@ -387,15 +381,13 @@ FOTO NOTA • JPG
 </header>
 
 
-<!-- INFORMASI -->
+<!-- INFORMASI NOTA -->
 
 <div class="card">
 
 <div class="section-title">
 
-<div class="section-number">
-01
-</div>
+<div class="section-number">01</div>
 
 <h2>Informasi Nota</h2>
 
@@ -410,8 +402,8 @@ FOTO NOTA • JPG
 
 <input
 id="store"
-placeholder="Nama toko kamu"
-autocomplete="off">
+value="DOKEN STORE"
+readonly>
 
 </div>
 
@@ -464,9 +456,7 @@ readonly>
 
 <div class="section-title">
 
-<div class="section-number">
-02
-</div>
+<div class="section-number">02</div>
 
 <h2>Daftar Barang</h2>
 
@@ -536,13 +526,13 @@ NotaKu • nota otomatis &amp; rapi
 
 
 <!-- =========================
-     NOTA YANG DIFOTO
+     NOTA FOTO
 ========================= -->
 
 <div id="receipt">
 
 <h2 id="rStore">
-NAMA TOKO
+DOKEN STORE
 </h2>
 
 
@@ -552,11 +542,9 @@ NAMA TOKO
 #1
 </div>
 
-<div id="rDate">
-</div>
+<div id="rDate"></div>
 
-<div id="rCustomer">
-</div>
+<div id="rCustomer"></div>
 
 </div>
 
@@ -572,9 +560,7 @@ NAMA TOKO
 
 <div class="receipt-item">
 
-<span>
-Subtotal
-</span>
+<span>Subtotal</span>
 
 <span id="rSubtotal">
 Rp0
@@ -634,41 +620,37 @@ TERIMA KASIH
 
 
 
-<!-- HTML2CANVAS -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-
 <script>
-
-/* ELEMENT */
-
-const itemsBox =
-document.getElementById("items");
-
 
 /* TANGGAL OTOMATIS */
 
 function setToday(){
 
-    const now = new Date();
+    const now=new Date();
 
-    const year =
-        now.getFullYear();
+    const year=now.getFullYear();
 
-    const month =
+    const month=
         String(now.getMonth()+1)
         .padStart(2,"0");
 
-    const day =
+    const day=
         String(now.getDate())
         .padStart(2,"0");
 
-    document.getElementById("date").value =
+    document.getElementById("date").value=
         year+"-"+month+"-"+day;
 }
 
 setToday();
+
+
+/* ELEMENT */
+
+const itemsBox=
+document.getElementById("items");
 
 
 /* RUPIAH */
@@ -686,7 +668,7 @@ function rupiah(n){
 
 function addItem(){
 
-    const div =
+    const div=
         document.createElement("div");
 
     div.className="item";
@@ -741,25 +723,24 @@ function calculate(){
     .querySelectorAll(".item")
     .forEach(row=>{
 
-        const qty =
+        const qty=
             Number(
                 row.querySelector(".qty").value
-            ) || 0;
+            )||0;
 
-        const price =
+        const price=
             Number(
                 row.querySelector(".price").value
-            ) || 0;
+            )||0;
 
-        subtotal += qty*price;
+        subtotal+=qty*price;
 
     });
 
 
     document.getElementById("total")
-    .textContent =
+    .textContent=
         rupiah(subtotal);
-
 
     updateReceipt(subtotal);
 }
@@ -769,48 +750,42 @@ function calculate(){
 
 function updateReceipt(subtotal){
 
-    const store =
-        document.getElementById("store").value;
-
-    const customer =
-        document.getElementById("customer").value;
-
-    const invoice =
-        document.getElementById("invoice").value;
-
-    const date =
-        document.getElementById("date").value;
-
-
     document.getElementById("rStore")
-        .textContent =
-        store || "NAMA TOKO";
+    .textContent="DOKEN STORE";
 
 
     document.getElementById("rInvoice")
-        .textContent =
-        invoice || "#1";
+    .textContent=
+        document.getElementById("invoice")
+        .value||"#1";
 
 
     document.getElementById("rCustomer")
-        .textContent =
+    .textContent=
         "Pembeli: "+
-        (customer || "-");
+        (
+            document.getElementById("customer")
+            .value||"-"
+        );
+
+
+    const date=
+        document.getElementById("date").value;
 
 
     if(date){
 
-        const d =
+        const d=
             new Date(date+"T00:00:00");
 
         document.getElementById("rDate")
-            .textContent =
+        .textContent=
             d.toLocaleDateString("id-ID");
 
     }
 
 
-    const rItems =
+    const rItems=
         document.getElementById("rItems");
 
     rItems.innerHTML="";
@@ -820,25 +795,26 @@ function updateReceipt(subtotal){
     .querySelectorAll(".item")
     .forEach(row=>{
 
-        const name =
-            row.querySelector(".name").value ||
+        const name=
+            row.querySelector(".name").value||
             "Barang";
 
-        const qty =
+        const qty=
             Number(
                 row.querySelector(".qty").value
-            ) || 0;
+            )||0;
 
-        const price =
+        const price=
             Number(
                 row.querySelector(".price").value
-            ) || 0;
+            )||0;
 
 
         if(qty>0){
 
-            const div =
+            const div=
                 document.createElement("div");
+
 
             div.innerHTML=`
 
@@ -862,6 +838,7 @@ function updateReceipt(subtotal){
 
             `;
 
+
             rItems.appendChild(div);
         }
 
@@ -869,11 +846,12 @@ function updateReceipt(subtotal){
 
 
     document.getElementById("rSubtotal")
-        .textContent =
+    .textContent=
         rupiah(subtotal);
 
+
     document.getElementById("rTotal")
-        .textContent =
+    .textContent=
         rupiah(subtotal);
 }
 
@@ -892,24 +870,18 @@ function escapeHTML(text){
 }
 
 
-/* =========================
-   SIMPAN SEBAGAI FOTO
-========================= */
+/* SIMPAN FOTO */
 
 async function saveImage(){
 
     calculate();
 
-
-    const receipt =
+    const receipt=
         document.getElementById("receipt");
 
-
-    const qris =
+    const qris=
         document.querySelector(".qris-img");
 
-
-    /* tunggu QRIS selesai dimuat */
 
     if(qris && !qris.complete){
 
@@ -923,14 +895,12 @@ async function saveImage(){
     }
 
 
-    await new Promise(resolve =>
+    await new Promise(resolve=>
         setTimeout(resolve,150)
     );
 
 
-    /* buat gambar */
-
-    const canvas =
+    const canvas=
         await html2canvas(
             receipt,
             {
@@ -942,32 +912,25 @@ async function saveImage(){
         );
 
 
-    /* nama file */
-
-    let number =
+    let number=
         document.getElementById("invoice")
-        .value ||
-        "#1";
+        .value||"#1";
 
 
-    number =
+    number=
         number.replace(
             /[^a-zA-Z0-9#_-]/g,
             "_"
         );
 
 
-    /*
-       ubah canvas jadi JPG
-    */
-
     canvas.toBlob(
         async blob=>{
 
-            if(!blob) return;
+            if(!blob)return;
 
 
-            const file =
+            const file=
                 new File(
                     [blob],
                     "nota-"+number+".jpg",
@@ -976,12 +939,6 @@ async function saveImage(){
                     }
                 );
 
-
-            /*
-               kalau browser Android
-               mendukung share file,
-               buka menu simpan/share
-            */
 
             if(
                 navigator.share &&
@@ -1000,33 +957,22 @@ async function saveImage(){
 
                     return;
 
-                }catch(e){
-
-                    /* user batal share */
-
-                }
+                }catch(e){}
 
             }
 
 
-            /*
-               fallback:
-               download JPG
-            */
-
-            const url =
+            const url=
                 URL.createObjectURL(blob);
 
 
-            const a =
+            const a=
                 document.createElement("a");
-
 
             a.href=url;
 
             a.download=
                 "nota-"+number+".jpg";
-
 
             document.body.appendChild(a);
 
@@ -1047,24 +993,25 @@ async function saveImage(){
 
         0.95
     );
-
 }
 
 
 /* INPUT */
 
 document
-.querySelectorAll(
-    "#store,#customer,#invoice"
-)
-.forEach(el=>{
+.getElementById("customer")
+.addEventListener(
+    "input",
+    calculate
+);
 
-    el.addEventListener(
-        "input",
-        calculate
-    );
 
-});
+document
+.getElementById("invoice")
+.addEventListener(
+    "input",
+    calculate
+);
 
 
 /* BARANG PERTAMA */
