@@ -179,18 +179,6 @@ input:focus{
     grid-template-columns:2fr .6fr 1.1fr 42px;
     gap:8px;
     margin-bottom:8px;
-    animation:slide .2s ease;
-}
-
-@keyframes slide{
-    from{
-        opacity:0;
-        transform:translateY(5px);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
 }
 
 .item input{
@@ -206,10 +194,6 @@ input:focus{
     cursor:pointer;
 }
 
-.delete:hover{
-    background:#ef444425;
-}
-
 .add{
     width:100%;
     margin-top:5px;
@@ -221,11 +205,6 @@ input:focus{
     font:inherit;
     font-weight:700;
     cursor:pointer;
-    transition:.2s;
-}
-
-.add:hover{
-    background:#6366f11a;
 }
 
 .total-box{
@@ -267,11 +246,6 @@ input:focus{
     cursor:pointer;
     background:linear-gradient(135deg,#6366f1,#8b5cf6);
     box-shadow:0 12px 30px #6366f133;
-    transition:.2s;
-}
-
-.download:hover{
-    transform:translateY(-1px);
 }
 
 .footer{
@@ -283,7 +257,7 @@ input:focus{
 
 
 /* =========================
-   NOTA PDF
+   NOTA
 ========================= */
 
 #receipt{
@@ -325,9 +299,6 @@ input:focus{
     word-break:break-word;
 }
 
-
-/* QRIS */
-
 .qris-box{
     text-align:center;
     margin-top:12px;
@@ -359,9 +330,6 @@ input:focus{
     font-size:13px;
     margin-top:10px;
 }
-
-
-/* MOBILE */
 
 @media(max-width:600px){
 
@@ -413,13 +381,13 @@ input:focus{
 </div>
 
 <div class="badge">
-AUTO PDF • 80MM
+FOTO NOTA • JPG
 </div>
 
 </header>
 
 
-<!-- INFORMASI NOTA -->
+<!-- INFORMASI -->
 
 <div class="card">
 
@@ -432,6 +400,7 @@ AUTO PDF • 80MM
 <h2>Informasi Nota</h2>
 
 </div>
+
 
 <div class="grid">
 
@@ -489,7 +458,7 @@ readonly>
 
 
 
-<!-- DAFTAR BARANG -->
+<!-- BARANG -->
 
 <div class="card">
 
@@ -549,9 +518,9 @@ Rp0
 
 <button
 class="download"
-onclick="downloadPDF()">
+onclick="saveImage()">
 
-↓ &nbsp; Download Nota PDF
+Simpan Nota sebagai Foto
 
 </button>
 
@@ -567,7 +536,7 @@ NotaKu • nota otomatis &amp; rapi
 
 
 <!-- =========================
-     NOTA PDF
+     NOTA YANG DIFOTO
 ========================= -->
 
 <div id="receipt">
@@ -657,22 +626,17 @@ untuk melakukan pembayaran
 <div class="line"></div>
 
 
-<!-- TEKS BAWAH -->
-
 <div class="thanks">
 TERIMA KASIH
 </div>
 
-
 </div>
 
 
 
-<!-- LIBRARY -->
+<!-- HTML2CANVAS -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
 <script>
@@ -764,11 +728,10 @@ function addItem(){
     itemsBox.appendChild(div);
 
     calculate();
-
 }
 
 
-/* HITUNG TOTAL */
+/* HITUNG */
 
 function calculate(){
 
@@ -788,8 +751,7 @@ function calculate(){
                 row.querySelector(".price").value
             ) || 0;
 
-        subtotal +=
-            qty * price;
+        subtotal += qty*price;
 
     });
 
@@ -800,7 +762,6 @@ function calculate(){
 
 
     updateReceipt(subtotal);
-
 }
 
 
@@ -809,20 +770,16 @@ function calculate(){
 function updateReceipt(subtotal){
 
     const store =
-        document.getElementById("store")
-        .value;
+        document.getElementById("store").value;
 
     const customer =
-        document.getElementById("customer")
-        .value;
+        document.getElementById("customer").value;
 
     const invoice =
-        document.getElementById("invoice")
-        .value;
+        document.getElementById("invoice").value;
 
     const date =
-        document.getElementById("date")
-        .value;
+        document.getElementById("date").value;
 
 
     document.getElementById("rStore")
@@ -850,11 +807,6 @@ function updateReceipt(subtotal){
             .textContent =
             d.toLocaleDateString("id-ID");
 
-    }else{
-
-        document.getElementById("rDate")
-            .textContent="-";
-
     }
 
 
@@ -869,8 +821,7 @@ function updateReceipt(subtotal){
     .forEach(row=>{
 
         const name =
-            row.querySelector(".name")
-            .value ||
+            row.querySelector(".name").value ||
             "Barang";
 
         const qty =
@@ -888,7 +839,6 @@ function updateReceipt(subtotal){
 
             const div =
                 document.createElement("div");
-
 
             div.innerHTML=`
 
@@ -912,9 +862,7 @@ function updateReceipt(subtotal){
 
             `;
 
-
             rItems.appendChild(div);
-
         }
 
     });
@@ -924,20 +872,17 @@ function updateReceipt(subtotal){
         .textContent =
         rupiah(subtotal);
 
-
     document.getElementById("rTotal")
         .textContent =
         rupiah(subtotal);
-
 }
 
 
-/* ESCAPE HTML */
+/* ESCAPE */
 
 function escapeHTML(text){
 
     return String(text)
-
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
@@ -947,9 +892,11 @@ function escapeHTML(text){
 }
 
 
-/* DOWNLOAD PDF */
+/* =========================
+   SIMPAN SEBAGAI FOTO
+========================= */
 
-async function downloadPDF(){
+async function saveImage(){
 
     calculate();
 
@@ -962,7 +909,7 @@ async function downloadPDF(){
         document.querySelector(".qris-img");
 
 
-    /* tunggu QRIS */
+    /* tunggu QRIS selesai dimuat */
 
     if(qris && !qris.complete){
 
@@ -981,7 +928,7 @@ async function downloadPDF(){
     );
 
 
-    /* render nota */
+    /* buat gambar */
 
     const canvas =
         await html2canvas(
@@ -993,57 +940,6 @@ async function downloadPDF(){
                 logging:false
             }
         );
-
-
-    /* ukuran 80mm */
-
-    const imgWidth=80;
-
-    const ratio =
-        canvas.height /
-        canvas.width;
-
-    const imgHeight =
-        imgWidth * ratio;
-
-
-    const {jsPDF} =
-        window.jspdf;
-
-
-    const pdf =
-        new jsPDF({
-
-            orientation:"portrait",
-
-            unit:"mm",
-
-            format:[
-                imgWidth,
-                imgHeight
-            ],
-
-            compress:true
-
-        });
-
-
-    pdf.addImage(
-
-        canvas.toDataURL("image/png"),
-
-        "PNG",
-
-        0,
-        0,
-
-        imgWidth,
-        imgHeight,
-
-        undefined,
-        "FAST"
-
-    );
 
 
     /* nama file */
@@ -1061,14 +957,101 @@ async function downloadPDF(){
         );
 
 
-    pdf.save(
-        "nota-"+number+".pdf"
+    /*
+       ubah canvas jadi JPG
+    */
+
+    canvas.toBlob(
+        async blob=>{
+
+            if(!blob) return;
+
+
+            const file =
+                new File(
+                    [blob],
+                    "nota-"+number+".jpg",
+                    {
+                        type:"image/jpeg"
+                    }
+                );
+
+
+            /*
+               kalau browser Android
+               mendukung share file,
+               buka menu simpan/share
+            */
+
+            if(
+                navigator.share &&
+                navigator.canShare &&
+                navigator.canShare({
+                    files:[file]
+                })
+            ){
+
+                try{
+
+                    await navigator.share({
+                        files:[file],
+                        title:"Nota "+number
+                    });
+
+                    return;
+
+                }catch(e){
+
+                    /* user batal share */
+
+                }
+
+            }
+
+
+            /*
+               fallback:
+               download JPG
+            */
+
+            const url =
+                URL.createObjectURL(blob);
+
+
+            const a =
+                document.createElement("a");
+
+
+            a.href=url;
+
+            a.download=
+                "nota-"+number+".jpg";
+
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            a.remove();
+
+
+            setTimeout(()=>{
+
+                URL.revokeObjectURL(url);
+
+            },1000);
+
+        },
+
+        "image/jpeg",
+
+        0.95
     );
 
 }
 
 
-/* INPUT REALTIME */
+/* INPUT */
 
 document
 .querySelectorAll(
