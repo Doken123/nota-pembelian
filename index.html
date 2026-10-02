@@ -8,7 +8,9 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -157,6 +159,12 @@ input:focus{
     box-shadow:0 0 0 3px #6366f118;
 }
 
+/* tanggal tidak bisa diubah */
+#date{
+    color:#94a3b8;
+    cursor:default;
+}
+
 .items-head{
     display:grid;
     grid-template-columns:2fr .6fr 1.1fr 42px;
@@ -172,6 +180,18 @@ input:focus{
     grid-template-columns:2fr .6fr 1.1fr 42px;
     gap:8px;
     margin-bottom:8px;
+    animation:slide .2s ease;
+}
+
+@keyframes slide{
+    from{
+        opacity:0;
+        transform:translateY(5px);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
 }
 
 .item input{
@@ -187,6 +207,10 @@ input:focus{
     cursor:pointer;
 }
 
+.delete:hover{
+    background:#ef444425;
+}
+
 .add{
     width:100%;
     margin-top:5px;
@@ -198,6 +222,11 @@ input:focus{
     font:inherit;
     font-weight:700;
     cursor:pointer;
+    transition:.2s;
+}
+
+.add:hover{
+    background:#6366f11a;
 }
 
 .total-box{
@@ -239,6 +268,16 @@ input:focus{
     cursor:pointer;
     background:linear-gradient(135deg,#6366f1,#8b5cf6);
     box-shadow:0 12px 30px #6366f133;
+    transition:.2s;
+}
+
+.download:hover{
+    transform:translateY(-1px);
+    box-shadow:0 16px 35px #6366f144;
+}
+
+.download:active{
+    transform:scale(.99);
 }
 
 .footer{
@@ -248,14 +287,22 @@ input:focus{
     margin-top:20px;
 }
 
+
+/* =========================
+   NOTA PDF
+========================= */
+
 #receipt{
     position:absolute;
     left:-99999px;
     top:0;
+
     width:80mm;
     padding:5mm;
+
     background:white;
     color:#000;
+
     font-family:"Courier New",monospace;
     font-size:12px;
 }
@@ -266,7 +313,9 @@ input:focus{
     font-size:18px;
 }
 
-.center{text-align:center}
+.center{
+    text-align:center;
+}
 
 .line{
     border-top:1px dashed #000;
@@ -290,10 +339,19 @@ input:focus{
     line-height:1.5;
 }
 
+
+/* =========================
+   MOBILE
+========================= */
+
 @media(max-width:600px){
 
     .container{
         padding:18px 12px 40px;
+    }
+
+    .header{
+        margin-bottom:16px;
     }
 
     .badge{
@@ -316,26 +374,40 @@ input:focus{
     .item{
         grid-template-columns:1fr 58px 105px 40px;
     }
+
+    .logo h1{
+        font-size:19px;
+    }
 }
 </style>
 </head>
+
 
 <body>
 
 <div class="container">
 
+
+<!-- HEADER -->
+
 <header class="header">
 
 <div class="logo">
 
-<div class="logo-icon">🧾</div>
+<div class="logo-icon">
+🧾
+</div>
 
 <div>
+
 <h1>NotaKu</h1>
+
 <p>buat nota jadi lebih simpel</p>
+
 </div>
 
 </div>
+
 
 <div class="badge">
 AUTO PDF • 80MM
@@ -344,11 +416,16 @@ AUTO PDF • 80MM
 </header>
 
 
+
+<!-- INFORMASI NOTA -->
+
 <div class="card">
 
 <div class="section-title">
 
-<div class="section-number">01</div>
+<div class="section-number">
+01
+</div>
 
 <h2>Informasi Nota</h2>
 
@@ -357,13 +434,15 @@ AUTO PDF • 80MM
 
 <div class="grid">
 
+
 <div class="field">
 
 <label>NAMA TOKO</label>
 
 <input
 id="store"
-placeholder="Nama toko kamu">
+placeholder="Nama toko kamu"
+autocomplete="off">
 
 </div>
 
@@ -374,7 +453,8 @@ placeholder="Nama toko kamu">
 
 <input
 id="customer"
-placeholder="Nama pembeli">
+placeholder="Nama pembeli"
+autocomplete="off">
 
 </div>
 
@@ -386,7 +466,8 @@ placeholder="Nama pembeli">
 <input
 id="invoice"
 value="#1"
-placeholder="#1">
+placeholder="#1"
+autocomplete="off">
 
 </div>
 
@@ -397,20 +478,27 @@ placeholder="#1">
 
 <input
 type="date"
-id="date">
+id="date"
+readonly>
+
+</div>
+
 
 </div>
 
 </div>
 
-</div>
 
+
+<!-- DAFTAR BARANG -->
 
 <div class="card">
 
 <div class="section-title">
 
-<div class="section-number">02</div>
+<div class="section-number">
+02
+</div>
 
 <h2>Daftar Barang</h2>
 
@@ -420,8 +508,11 @@ id="date">
 <div class="items-head">
 
 <span>BARANG</span>
+
 <span>QTY</span>
+
 <span>HARGA</span>
+
 <span></span>
 
 </div>
@@ -430,10 +521,17 @@ id="date">
 <div id="items"></div>
 
 
-<button class="add" onclick="addItem()">
+<button
+class="add"
+onclick="addItem()">
+
 ＋ Tambah Barang
+
 </button>
 
+
+
+<!-- TOTAL -->
 
 <div class="total-box">
 
@@ -443,8 +541,12 @@ id="date">
 TOTAL PEMBAYARAN
 </span>
 
-<span class="total-value" id="total">
+<span
+class="total-value"
+id="total">
+
 Rp0
+
 </span>
 
 </div>
@@ -452,152 +554,577 @@ Rp0
 </div>
 
 
-<button class="download" onclick="downloadPDF()">
+
+<!-- DOWNLOAD -->
+
+<button
+class="download"
+onclick="downloadPDF()">
+
 ↓ &nbsp; Download Nota PDF
+
 </button>
 
 </div>
 
 
+
 <div class="footer">
+
 NotaKu • nota otomatis &amp; rapi
-</div>
 
 </div>
 
+
+</div>
+
+
+
+<!-- =========================
+     TEMPLATE NOTA
+========================= -->
 
 <div id="receipt">
 
-<h2 id="rStore">NAMA TOKO</h2>
+
+<h2 id="rStore">
+NAMA TOKO
+</h2>
+
 
 <div class="center">
 
-<div id="rInvoice">#1</div>
+<div id="rInvoice">
+#1
+</div>
 
-<div id="rDate"></div>
+<div id="rDate">
+</div>
 
-<div id="rCustomer"></div>
+<div id="rCustomer">
+</div>
 
 </div>
 
-<div class="line"></div>
 
-<div id="rItems"></div>
+<div class="line">
+</div>
 
-<div class="line"></div>
+
+<div id="rItems">
+</div>
+
+
+<div class="line">
+</div>
+
 
 <div class="receipt-item">
 
-<span>Subtotal</span>
+<span>
+Subtotal
+</span>
 
-<span id="rSubtotal">Rp0</span>
-
-</div>
-
-<div class="line"></div>
-
-<div class="receipt-item" style="font-size:15px">
-
-<b>TOTAL</b>
-
-<b id="rTotal">Rp0</b>
+<span id="rSubtotal">
+Rp0
+</span>
 
 </div>
 
-<div class="line"></div>
+
+<div class="line">
+</div>
+
+
+<div
+class="receipt-item"
+style="font-size:15px">
+
+<b>
+TOTAL
+</b>
+
+<b id="rTotal">
+Rp0
+</b>
+
+</div>
+
+
+<div class="line">
+</div>
+
 
 <div class="thanks">
 
 TERIMA KASIH<br>
+
 BARANG YANG SUDAH DIBELI<br>
+
 TIDAK DAPAT DIKEMBALIKAN
 
 </div>
 
+
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- PDF LIBRARY -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
+
+
 
 <script>
 
-const itemsBox=document.getElementById("items");
+/* =========================
+   ELEMENT
+========================= */
 
-const today=new Date();
+const itemsBox =
+document.getElementById("items");
 
-document.getElementById("date").value=
-today.toISOString().split("T")[0];
 
+/* =========================
+   TANGGAL OTOMATIS HARI INI
+========================= */
+
+function setToday(){
+
+    const now = new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(now.getMonth()+1)
+        .padStart(2,"0");
+
+    const day =
+        String(now.getDate())
+        .padStart(2,"0");
+
+    document.getElementById("date").value =
+        year+"-"+month+"-"+day;
+}
+
+setToday();
+
+
+/* =========================
+   FORMAT RUPIAH
+========================= */
 
 function rupiah(n){
 
-return "Rp"+
-Number(n||0).toLocaleString("id-ID");
+    return "Rp"+
+        Number(n||0)
+        .toLocaleString("id-ID");
 
 }
 
+
+/* =========================
+   TAMBAH BARANG
+========================= */
 
 function addItem(){
 
-const div=document.createElement("div");
+    const div =
+        document.createElement("div");
 
-div.className="item";
+    div.className = "item";
 
-div.innerHTML=`
 
-<input
-class="name"
-placeholder="Nama barang"
-oninput="calculate()">
+    div.innerHTML = `
 
-<input
-class="qty"
-type="number"
-value="1"
-min="1"
-oninput="calculate()">
+        <input
+            class="name"
+            placeholder="Nama barang"
+            autocomplete="off"
+            oninput="calculate()">
 
-<input
-class="price"
-type="number"
-value="0"
-placeholder="Harga"
-oninput="calculate()">
+        <input
+            class="qty"
+            type="number"
+            value="1"
+            min="1"
+            oninput="calculate()">
 
-<button
-class="delete"
-onclick="this.parentElement.remove();calculate()">
-×
-</button>
+        <input
+            class="price"
+            type="number"
+            value="0"
+            min="0"
+            placeholder="Harga"
+            oninput="calculate()">
 
-`;
+        <button
+            class="delete"
+            onclick="
+                this.parentElement.remove();
+                calculate();
+            ">
+            ×
+        </button>
 
-itemsBox.appendChild(div);
+    `;
 
-calculate();
+
+    itemsBox.appendChild(div);
+
+    calculate();
 
 }
 
 
+/* =========================
+   HITUNG TOTAL
+========================= */
+
 function calculate(){
 
-let subtotal=0;
+    let subtotal = 0;
 
 
-document.querySelectorAll(".item")
-.forEach(row=>{
+    document
+    .querySelectorAll(".item")
+    .forEach(row=>{
 
-const qty=
-Number(row.querySelector(".qty").value)||0;
+        const qty =
+            Number(
+                row.querySelector(".qty").value
+            ) || 0;
 
-const price=
-Number(row.querySelector(".price").value)||0;
 
-subtotal+=qty*price;
+        const price =
+            Number(
+                row.querySelector(".price").value
+            ) || 0;
+
+
+        subtotal +=
+            qty * price;
+
+    });
+
+
+    document.getElementById("total")
+        .textContent =
+        rupiah(subtotal);
+
+
+    updateReceipt(subtotal);
+
+}
+
+
+/* =========================
+   UPDATE NOTA
+========================= */
+
+function updateReceipt(subtotal){
+
+    const store =
+        document.getElementById("store")
+        .value;
+
+
+    const customer =
+        document.getElementById("customer")
+        .value;
+
+
+    const invoice =
+        document.getElementById("invoice")
+        .value;
+
+
+    const date =
+        document.getElementById("date")
+        .value;
+
+
+    document.getElementById("rStore")
+        .textContent =
+        store || "NAMA TOKO";
+
+
+    document.getElementById("rInvoice")
+        .textContent =
+        invoice || "#1";
+
+
+    document.getElementById("rCustomer")
+        .textContent =
+        "Pembeli: "+
+        (customer || "-");
+
+
+    if(date){
+
+        const d =
+            new Date(date+"T00:00:00");
+
+
+        document.getElementById("rDate")
+            .textContent =
+            d.toLocaleDateString("id-ID");
+
+    }else{
+
+        document.getElementById("rDate")
+            .textContent = "-";
+
+    }
+
+
+    const rItems =
+        document.getElementById("rItems");
+
+
+    rItems.innerHTML = "";
+
+
+    document
+    .querySelectorAll(".item")
+    .forEach(row=>{
+
+        const name =
+            row.querySelector(".name")
+            .value ||
+            "Barang";
+
+
+        const qty =
+            Number(
+                row.querySelector(".qty")
+                .value
+            ) || 0;
+
+
+        const price =
+            Number(
+                row.querySelector(".price")
+                .value
+            ) || 0;
+
+
+        if(qty > 0){
+
+            const div =
+                document.createElement("div");
+
+
+            div.innerHTML = `
+
+                <div class="item-name">
+                    ${escapeHTML(name)}
+                </div>
+
+                <div class="receipt-item">
+
+                    <span>
+                        ${qty} x ${rupiah(price)}
+                    </span>
+
+                    <span>
+                        ${rupiah(qty*price)}
+                    </span>
+
+                </div>
+
+                <div style="height:6px"></div>
+
+            `;
+
+
+            rItems.appendChild(div);
+
+        }
+
+    });
+
+
+    document.getElementById("rSubtotal")
+        .textContent =
+        rupiah(subtotal);
+
+
+    document.getElementById("rTotal")
+        .textContent =
+        rupiah(subtotal);
+
+}
+
+
+/* =========================
+   AMANKAN TEKS
+========================= */
+
+function escapeHTML(text){
+
+    return String(text)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   DOWNLOAD PDF
+========================= */
+
+async function downloadPDF(){
+
+    calculate();
+
+
+    const receipt =
+        document.getElementById("receipt");
+
+
+    await new Promise(resolve =>
+        setTimeout(resolve,100)
+    );
+
+
+    const canvas =
+        await html2canvas(
+            receipt,
+            {
+                scale:3,
+
+                backgroundColor:"#ffffff",
+
+                useCORS:true,
+
+                logging:false
+            }
+        );
+
+
+    /*
+       LEBAR NOTA = 80MM
+
+       TINGGI OTOMATIS
+       MENGIKUTI ISI NOTA
+    */
+
+    const imgWidth = 80;
+
+
+    const ratio =
+        canvas.height /
+        canvas.width;
+
+
+    const imgHeight =
+        imgWidth * ratio;
+
+
+    const {jsPDF} =
+        window.jspdf;
+
+
+    const pdf =
+        new jsPDF({
+
+            orientation:"portrait",
+
+            unit:"mm",
+
+            format:[
+                imgWidth,
+                imgHeight
+            ],
+
+            compress:true
+
+        });
+
+
+    pdf.addImage(
+
+        canvas.toDataURL(
+            "image/png"
+        ),
+
+        "PNG",
+
+        0,
+
+        0,
+
+        imgWidth,
+
+        imgHeight,
+
+        undefined,
+
+        "FAST"
+
+    );
+
+
+    let number =
+        document.getElementById("invoice")
+        .value ||
+        "#1";
+
+
+    number =
+        number.replace(
+            /[^a-zA-Z0-9#_-]/g,
+            "_"
+        );
+
+
+    pdf.save(
+        "nota-"+number+".pdf"
+    );
+
+}
+
+
+/* =========================
+   INPUT REALTIME
+========================= */
+
+document
+.querySelectorAll(
+    "#store,#customer,#invoice"
+)
+.forEach(el=>{
+
+    el.addEventListener(
+        "input",
+        calculate
+    );
 
 });
 
 
-document.getElement
+/* =========================
+   BARANG PERTAMA
+========================= */
+
+addItem();
+
+</script>
+
+</body>
+</html>
