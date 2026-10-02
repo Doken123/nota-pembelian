@@ -206,6 +206,10 @@ input:focus{
     cursor:pointer;
 }
 
+.delete:hover{
+    background:#ef444425;
+}
+
 .add{
     width:100%;
     margin-top:5px;
@@ -217,6 +221,11 @@ input:focus{
     font:inherit;
     font-weight:700;
     cursor:pointer;
+    transition:.2s;
+}
+
+.add:hover{
+    background:#6366f11a;
 }
 
 .total-box{
@@ -258,6 +267,11 @@ input:focus{
     cursor:pointer;
     background:linear-gradient(135deg,#6366f1,#8b5cf6);
     box-shadow:0 12px 30px #6366f133;
+    transition:.2s;
+}
+
+.download:hover{
+    transform:translateY(-1px);
 }
 
 .footer{
@@ -276,13 +290,10 @@ input:focus{
     position:absolute;
     left:-99999px;
     top:0;
-
     width:80mm;
     padding:5mm;
-
     background:white;
     color:#000;
-
     font-family:"Courier New",monospace;
     font-size:12px;
 }
@@ -315,7 +326,7 @@ input:focus{
 }
 
 
-/* QRIS DI NOTA */
+/* QRIS */
 
 .qris-box{
     text-align:center;
@@ -344,10 +355,13 @@ input:focus{
 
 .thanks{
     text-align:center;
-    line-height:1.5;
+    font-weight:bold;
+    font-size:13px;
     margin-top:10px;
 }
 
+
+/* MOBILE */
 
 @media(max-width:600px){
 
@@ -419,7 +433,6 @@ AUTO PDF • 80MM
 
 </div>
 
-
 <div class="grid">
 
 <div class="field">
@@ -476,7 +489,7 @@ readonly>
 
 
 
-<!-- BARANG -->
+<!-- DAFTAR BARANG -->
 
 <div class="card">
 
@@ -554,7 +567,7 @@ NotaKu • nota otomatis &amp; rapi
 
 
 <!-- =========================
-     NOTA YANG AKAN DI PDF
+     NOTA PDF
 ========================= -->
 
 <div id="receipt">
@@ -579,16 +592,13 @@ NAMA TOKO
 </div>
 
 
-<div class="line">
-</div>
+<div class="line"></div>
 
 
-<div id="rItems">
-</div>
+<div id="rItems"></div>
 
 
-<div class="line">
-</div>
+<div class="line"></div>
 
 
 <div class="receipt-item">
@@ -604,8 +614,7 @@ Rp0
 </div>
 
 
-<div class="line">
-</div>
+<div class="line"></div>
 
 
 <div
@@ -621,8 +630,7 @@ Rp0
 </div>
 
 
-<div class="line">
-</div>
+<div class="line"></div>
 
 
 <!-- QRIS -->
@@ -646,46 +654,36 @@ untuk melakukan pembayaran
 </div>
 
 
-<div class="line">
-</div>
+<div class="line"></div>
 
+
+<!-- TEKS BAWAH -->
 
 <div class="thanks">
-
-TERIMA KASIH<br>
-
-BARANG YANG SUDAH DIBELI<br>
-
-TIDAK DAPAT DIKEMBALIKAN
-
+TERIMA KASIH
 </div>
+
 
 </div>
 
 
 
-<!-- LIBRARY PDF -->
+<!-- LIBRARY -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
 <script>
 
-/* =========================
-   ELEMENT
-========================= */
+/* ELEMENT */
 
 const itemsBox =
 document.getElementById("items");
 
 
-/* =========================
-   TANGGAL HARI INI
-========================= */
+/* TANGGAL OTOMATIS */
 
 function setToday(){
 
@@ -709,10 +707,7 @@ function setToday(){
 setToday();
 
 
-
-/* =========================
-   RUPIAH
-========================= */
+/* RUPIAH */
 
 function rupiah(n){
 
@@ -723,10 +718,7 @@ function rupiah(n){
 }
 
 
-
-/* =========================
-   TAMBAH BARANG
-========================= */
+/* TAMBAH BARANG */
 
 function addItem(){
 
@@ -734,7 +726,6 @@ function addItem(){
         document.createElement("div");
 
     div.className="item";
-
 
     div.innerHTML=`
 
@@ -765,13 +756,10 @@ function addItem(){
                 this.parentElement.remove();
                 calculate();
             ">
-
             ×
-
         </button>
 
     `;
-
 
     itemsBox.appendChild(div);
 
@@ -780,15 +768,11 @@ function addItem(){
 }
 
 
-
-/* =========================
-   HITUNG
-========================= */
+/* HITUNG TOTAL */
 
 function calculate(){
 
     let subtotal=0;
-
 
     document
     .querySelectorAll(".item")
@@ -799,12 +783,10 @@ function calculate(){
                 row.querySelector(".qty").value
             ) || 0;
 
-
         const price =
             Number(
                 row.querySelector(".price").value
             ) || 0;
-
 
         subtotal +=
             qty * price;
@@ -822,10 +804,7 @@ function calculate(){
 }
 
 
-
-/* =========================
-   UPDATE NOTA
-========================= */
+/* UPDATE NOTA */
 
 function updateReceipt(subtotal){
 
@@ -833,16 +812,13 @@ function updateReceipt(subtotal){
         document.getElementById("store")
         .value;
 
-
     const customer =
         document.getElementById("customer")
         .value;
 
-
     const invoice =
         document.getElementById("invoice")
         .value;
-
 
     const date =
         document.getElementById("date")
@@ -870,7 +846,6 @@ function updateReceipt(subtotal){
         const d =
             new Date(date+"T00:00:00");
 
-
         document.getElementById("rDate")
             .textContent =
             d.toLocaleDateString("id-ID");
@@ -886,7 +861,6 @@ function updateReceipt(subtotal){
     const rItems =
         document.getElementById("rItems");
 
-
     rItems.innerHTML="";
 
 
@@ -899,12 +873,10 @@ function updateReceipt(subtotal){
             .value ||
             "Barang";
 
-
         const qty =
             Number(
                 row.querySelector(".qty").value
             ) || 0;
-
 
         const price =
             Number(
@@ -960,32 +932,22 @@ function updateReceipt(subtotal){
 }
 
 
-
-/* =========================
-   ESCAPE HTML
-========================= */
+/* ESCAPE HTML */
 
 function escapeHTML(text){
 
     return String(text)
 
     .replace(/&/g,"&amp;")
-
     .replace(/</g,"&lt;")
-
     .replace(/>/g,"&gt;")
-
     .replace(/"/g,"&quot;")
-
     .replace(/'/g,"&#039;");
 
 }
 
 
-
-/* =========================
-   DOWNLOAD PDF
-========================= */
+/* DOWNLOAD PDF */
 
 async function downloadPDF(){
 
@@ -996,13 +958,11 @@ async function downloadPDF(){
         document.getElementById("receipt");
 
 
-    /*
-       tunggu QRIS selesai dimuat
-    */
-
     const qris =
         document.querySelector(".qris-img");
 
+
+    /* tunggu QRIS */
 
     if(qris && !qris.complete){
 
@@ -1021,6 +981,8 @@ async function downloadPDF(){
     );
 
 
+    /* render nota */
+
     const canvas =
         await html2canvas(
             receipt,
@@ -1033,18 +995,13 @@ async function downloadPDF(){
         );
 
 
-    /*
-       ukuran nota 80mm
-       tinggi otomatis mengikuti isi
-    */
+    /* ukuran 80mm */
 
     const imgWidth=80;
-
 
     const ratio =
         canvas.height /
         canvas.width;
-
 
     const imgHeight =
         imgWidth * ratio;
@@ -1078,23 +1035,18 @@ async function downloadPDF(){
         "PNG",
 
         0,
-
         0,
 
         imgWidth,
-
         imgHeight,
 
         undefined,
-
         "FAST"
 
     );
 
 
-    /*
-       nomor nota jadi nama file
-    */
+    /* nama file */
 
     let number =
         document.getElementById("invoice")
@@ -1116,10 +1068,7 @@ async function downloadPDF(){
 }
 
 
-
-/* =========================
-   INPUT REALTIME
-========================= */
+/* INPUT REALTIME */
 
 document
 .querySelectorAll(
@@ -1135,10 +1084,7 @@ document
 });
 
 
-
-/* =========================
-   BARANG PERTAMA
-========================= */
+/* BARANG PERTAMA */
 
 addItem();
 
