@@ -8,9 +8,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -40,8 +38,6 @@ body:before{
     padding:24px 16px 50px;
     position:relative;
 }
-
-/* HEADER */
 
 .header{
     display:flex;
@@ -88,8 +84,6 @@ body:before{
     font-size:11px;
     font-weight:700;
 }
-
-/* CARD */
 
 .card{
     background:linear-gradient(145deg,#151c2b,#101622);
@@ -163,8 +157,6 @@ input:focus{
     box-shadow:0 0 0 3px #6366f118;
 }
 
-/* ITEMS */
-
 .items-head{
     display:grid;
     grid-template-columns:2fr .6fr 1.1fr 42px;
@@ -180,18 +172,6 @@ input:focus{
     grid-template-columns:2fr .6fr 1.1fr 42px;
     gap:8px;
     margin-bottom:8px;
-    animation:slide .2s ease;
-}
-
-@keyframes slide{
-    from{
-        opacity:0;
-        transform:translateY(5px);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
 }
 
 .item input{
@@ -207,10 +187,6 @@ input:focus{
     cursor:pointer;
 }
 
-.delete:hover{
-    background:#ef444425;
-}
-
 .add{
     width:100%;
     margin-top:5px;
@@ -222,14 +198,7 @@ input:focus{
     font:inherit;
     font-weight:700;
     cursor:pointer;
-    transition:.2s;
 }
-
-.add:hover{
-    background:#6366f11a;
-}
-
-/* TOTAL */
 
 .total-box{
     margin-top:20px;
@@ -270,16 +239,6 @@ input:focus{
     cursor:pointer;
     background:linear-gradient(135deg,#6366f1,#8b5cf6);
     box-shadow:0 12px 30px #6366f133;
-    transition:.2s;
-}
-
-.download:hover{
-    transform:translateY(-1px);
-    box-shadow:0 16px 35px #6366f144;
-}
-
-.download:active{
-    transform:scale(.99);
 }
 
 .footer{
@@ -288,8 +247,6 @@ input:focus{
     font-size:10px;
     margin-top:20px;
 }
-
-/* RECEIPT */
 
 #receipt{
     position:absolute;
@@ -309,9 +266,7 @@ input:focus{
     font-size:18px;
 }
 
-.center{
-    text-align:center;
-}
+.center{text-align:center}
 
 .line{
     border-top:1px dashed #000;
@@ -335,16 +290,10 @@ input:focus{
     line-height:1.5;
 }
 
-/* MOBILE */
-
 @media(max-width:600px){
 
     .container{
         padding:18px 12px 40px;
-    }
-
-    .header{
-        margin-bottom:16px;
     }
 
     .badge{
@@ -366,10 +315,6 @@ input:focus{
 
     .item{
         grid-template-columns:1fr 58px 105px 40px;
-    }
-
-    .logo h1{
-        font-size:19px;
     }
 }
 </style>
@@ -398,8 +343,6 @@ AUTO PDF • 80MM
 
 </header>
 
-
-<!-- INFORMASI -->
 
 <div class="card">
 
@@ -438,6 +381,18 @@ placeholder="Nama pembeli">
 
 <div class="field">
 
+<label>NOMOR NOTA</label>
+
+<input
+id="invoice"
+value="#1"
+placeholder="#1">
+
+</div>
+
+
+<div class="field">
+
 <label>TANGGAL</label>
 
 <input
@@ -450,8 +405,6 @@ id="date">
 
 </div>
 
-
-<!-- BARANG -->
 
 <div class="card">
 
@@ -513,8 +466,6 @@ NotaKu • nota otomatis &amp; rapi
 </div>
 
 
-<!-- RECEIPT -->
-
 <div id="receipt">
 
 <h2 id="rStore">NAMA TOKO</h2>
@@ -570,7 +521,6 @@ TIDAK DAPAT DIKEMBALIKAN
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-
 <script>
 
 const itemsBox=document.getElementById("items");
@@ -579,17 +529,6 @@ const today=new Date();
 
 document.getElementById("date").value=
 today.toISOString().split("T")[0];
-
-
-/* NOMOR NOTA */
-
-let invoiceNumber=
-parseInt(
-localStorage.getItem("invoiceNumber")||"1"
-);
-
-document.getElementById("rInvoice").textContent=
-"#"+invoiceNumber;
 
 
 function rupiah(n){
@@ -651,252 +590,14 @@ document.querySelectorAll(".item")
 .forEach(row=>{
 
 const qty=
-Number(
-row.querySelector(".qty").value
-)||0;
+Number(row.querySelector(".qty").value)||0;
 
 const price=
-Number(
-row.querySelector(".price").value
-)||0;
+Number(row.querySelector(".price").value)||0;
 
 subtotal+=qty*price;
 
 });
 
 
-document.getElementById("total")
-.textContent=rupiah(subtotal);
-
-updateReceipt(subtotal);
-
-}
-
-
-function updateReceipt(subtotal){
-
-document.getElementById("rStore")
-.textContent=
-document.getElementById("store").value||
-"NAMA TOKO";
-
-
-document.getElementById("rInvoice")
-.textContent=
-"#"+invoiceNumber;
-
-
-document.getElementById("rCustomer")
-.textContent=
-"Pembeli: "+
-(
-document.getElementById("customer").value||"-"
-);
-
-
-const date=
-document.getElementById("date").value;
-
-
-document.getElementById("rDate")
-.textContent=
-
-date
-?
-new Date(date+"T00:00:00")
-.toLocaleDateString("id-ID")
-:
-"-";
-
-
-const rItems=
-document.getElementById("rItems");
-
-rItems.innerHTML="";
-
-
-document.querySelectorAll(".item")
-.forEach(row=>{
-
-const name=
-row.querySelector(".name").value||
-"Barang";
-
-const qty=
-Number(
-row.querySelector(".qty").value
-)||0;
-
-const price=
-Number(
-row.querySelector(".price").value
-)||0;
-
-
-if(qty>0){
-
-const div=
-document.createElement("div");
-
-div.innerHTML=`
-
-<div class="item-name">
-${escapeHTML(name)}
-</div>
-
-<div class="receipt-item">
-
-<span>
-${qty} x ${rupiah(price)}
-</span>
-
-<span>
-${rupiah(qty*price)}
-</span>
-
-</div>
-
-<div style="height:6px"></div>
-`;
-
-rItems.appendChild(div);
-
-}
-
-});
-
-
-document.getElementById("rSubtotal")
-.textContent=rupiah(subtotal);
-
-document.getElementById("rTotal")
-.textContent=rupiah(subtotal);
-
-}
-
-
-function escapeHTML(text){
-
-return text
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-async function downloadPDF(){
-
-calculate();
-
-const receipt=
-document.getElementById("receipt");
-
-
-await new Promise(resolve=>
-setTimeout(resolve,100)
-);
-
-
-const canvas=
-await html2canvas(receipt,{
-
-scale:3,
-
-backgroundColor:"#ffffff",
-
-useCORS:true,
-
-logging:false
-
-});
-
-
-const imgWidth=80;
-
-const ratio=
-canvas.height/canvas.width;
-
-const imgHeight=
-imgWidth*ratio;
-
-
-const {jsPDF}=
-window.jspdf;
-
-
-const pdf=
-new jsPDF({
-
-orientation:"portrait",
-
-unit:"mm",
-
-format:[imgWidth,imgHeight],
-
-compress:true
-
-});
-
-
-pdf.addImage(
-
-canvas.toDataURL("image/png"),
-
-"PNG",
-
-0,
-0,
-imgWidth,
-imgHeight,
-
-undefined,
-"FAST"
-
-);
-
-
-pdf.save(
-"nota-#"+invoiceNumber+".pdf"
-);
-
-
-/* nomor berikutnya */
-
-invoiceNumber++;
-
-localStorage.setItem(
-"invoiceNumber",
-invoiceNumber
-);
-
-document.getElementById("rInvoice")
-.textContent="#"+invoiceNumber;
-
-}
-
-
-/* realtime */
-
-document
-.querySelectorAll("#store,#customer,#date")
-.forEach(el=>{
-
-el.addEventListener(
-"input",
-calculate
-);
-
-});
-
-
-/* barang pertama */
-
-addItem();
-
-</script>
-
-</body>
-</html>
+document.getElement
