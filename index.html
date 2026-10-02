@@ -159,7 +159,6 @@ input:focus{
     box-shadow:0 0 0 3px #6366f118;
 }
 
-/* tanggal tidak bisa diubah */
 #date{
     color:#94a3b8;
     cursor:default;
@@ -207,10 +206,6 @@ input:focus{
     cursor:pointer;
 }
 
-.delete:hover{
-    background:#ef444425;
-}
-
 .add{
     width:100%;
     margin-top:5px;
@@ -222,11 +217,6 @@ input:focus{
     font:inherit;
     font-weight:700;
     cursor:pointer;
-    transition:.2s;
-}
-
-.add:hover{
-    background:#6366f11a;
 }
 
 .total-box{
@@ -268,16 +258,6 @@ input:focus{
     cursor:pointer;
     background:linear-gradient(135deg,#6366f1,#8b5cf6);
     box-shadow:0 12px 30px #6366f133;
-    transition:.2s;
-}
-
-.download:hover{
-    transform:translateY(-1px);
-    box-shadow:0 16px 35px #6366f144;
-}
-
-.download:active{
-    transform:scale(.99);
 }
 
 .footer{
@@ -334,24 +314,45 @@ input:focus{
     word-break:break-word;
 }
 
+
+/* QRIS DI NOTA */
+
+.qris-box{
+    text-align:center;
+    margin-top:12px;
+}
+
+.qris-title{
+    font-weight:bold;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.qris-img{
+    display:block;
+    width:42mm;
+    height:42mm;
+    object-fit:contain;
+    margin:0 auto;
+}
+
+.qris-text{
+    margin-top:5px;
+    font-size:10px;
+    line-height:1.4;
+}
+
 .thanks{
     text-align:center;
     line-height:1.5;
+    margin-top:10px;
 }
 
-
-/* =========================
-   MOBILE
-========================= */
 
 @media(max-width:600px){
 
     .container{
         padding:18px 12px 40px;
-    }
-
-    .header{
-        margin-bottom:16px;
     }
 
     .badge{
@@ -374,21 +375,13 @@ input:focus{
     .item{
         grid-template-columns:1fr 58px 105px 40px;
     }
-
-    .logo h1{
-        font-size:19px;
-    }
 }
 </style>
 </head>
 
-
 <body>
 
 <div class="container">
-
-
-<!-- HEADER -->
 
 <header class="header">
 
@@ -399,22 +392,17 @@ input:focus{
 </div>
 
 <div>
-
 <h1>NotaKu</h1>
-
 <p>buat nota jadi lebih simpel</p>
-
 </div>
 
 </div>
-
 
 <div class="badge">
 AUTO PDF • 80MM
 </div>
 
 </header>
-
 
 
 <!-- INFORMASI NOTA -->
@@ -433,7 +421,6 @@ AUTO PDF • 80MM
 
 
 <div class="grid">
-
 
 <div class="field">
 
@@ -483,14 +470,13 @@ readonly>
 
 </div>
 
-
 </div>
 
 </div>
 
 
 
-<!-- DAFTAR BARANG -->
+<!-- BARANG -->
 
 <div class="card">
 
@@ -508,11 +494,8 @@ readonly>
 <div class="items-head">
 
 <span>BARANG</span>
-
 <span>QTY</span>
-
 <span>HARGA</span>
-
 <span></span>
 
 </div>
@@ -529,9 +512,6 @@ onclick="addItem()">
 
 </button>
 
-
-
-<!-- TOTAL -->
 
 <div class="total-box">
 
@@ -554,9 +534,6 @@ Rp0
 </div>
 
 
-
-<!-- DOWNLOAD -->
-
 <button
 class="download"
 onclick="downloadPDF()">
@@ -568,24 +545,19 @@ onclick="downloadPDF()">
 </div>
 
 
-
 <div class="footer">
-
 NotaKu • nota otomatis &amp; rapi
-
 </div>
-
 
 </div>
 
 
 
 <!-- =========================
-     TEMPLATE NOTA
+     NOTA YANG AKAN DI PDF
 ========================= -->
 
 <div id="receipt">
-
 
 <h2 id="rStore">
 NAMA TOKO
@@ -640,13 +612,36 @@ Rp0
 class="receipt-item"
 style="font-size:15px">
 
-<b>
-TOTAL
-</b>
+<b>TOTAL</b>
 
 <b id="rTotal">
 Rp0
 </b>
+
+</div>
+
+
+<div class="line">
+</div>
+
+
+<!-- QRIS -->
+
+<div class="qris-box">
+
+<div class="qris-title">
+SCAN QRIS UNTUK MEMBAYAR
+</div>
+
+<img
+src="qris.jpg"
+class="qris-img"
+alt="QRIS">
+
+<div class="qris-text">
+Silakan scan QRIS di atas<br>
+untuk melakukan pembayaran
+</div>
 
 </div>
 
@@ -665,19 +660,17 @@ TIDAK DAPAT DIKEMBALIKAN
 
 </div>
 
-
 </div>
 
 
 
-<!-- PDF LIBRARY -->
+<!-- LIBRARY PDF -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
 </script>
-
 
 
 <script>
@@ -691,7 +684,7 @@ document.getElementById("items");
 
 
 /* =========================
-   TANGGAL OTOMATIS HARI INI
+   TANGGAL HARI INI
 ========================= */
 
 function setToday(){
@@ -716,17 +709,19 @@ function setToday(){
 setToday();
 
 
+
 /* =========================
-   FORMAT RUPIAH
+   RUPIAH
 ========================= */
 
 function rupiah(n){
 
     return "Rp"+
-        Number(n||0)
-        .toLocaleString("id-ID");
+    Number(n||0)
+    .toLocaleString("id-ID");
 
 }
+
 
 
 /* =========================
@@ -738,10 +733,10 @@ function addItem(){
     const div =
         document.createElement("div");
 
-    div.className = "item";
+    div.className="item";
 
 
-    div.innerHTML = `
+    div.innerHTML=`
 
         <input
             class="name"
@@ -770,7 +765,9 @@ function addItem(){
                 this.parentElement.remove();
                 calculate();
             ">
+
             ×
+
         </button>
 
     `;
@@ -783,13 +780,14 @@ function addItem(){
 }
 
 
+
 /* =========================
-   HITUNG TOTAL
+   HITUNG
 ========================= */
 
 function calculate(){
 
-    let subtotal = 0;
+    let subtotal=0;
 
 
     document
@@ -815,13 +813,14 @@ function calculate(){
 
 
     document.getElementById("total")
-        .textContent =
+    .textContent =
         rupiah(subtotal);
 
 
     updateReceipt(subtotal);
 
 }
+
 
 
 /* =========================
@@ -879,7 +878,7 @@ function updateReceipt(subtotal){
     }else{
 
         document.getElementById("rDate")
-            .textContent = "-";
+            .textContent="-";
 
     }
 
@@ -888,7 +887,7 @@ function updateReceipt(subtotal){
         document.getElementById("rItems");
 
 
-    rItems.innerHTML = "";
+    rItems.innerHTML="";
 
 
     document
@@ -903,25 +902,23 @@ function updateReceipt(subtotal){
 
         const qty =
             Number(
-                row.querySelector(".qty")
-                .value
+                row.querySelector(".qty").value
             ) || 0;
 
 
         const price =
             Number(
-                row.querySelector(".price")
-                .value
+                row.querySelector(".price").value
             ) || 0;
 
 
-        if(qty > 0){
+        if(qty>0){
 
             const div =
                 document.createElement("div");
 
 
-            div.innerHTML = `
+            div.innerHTML=`
 
                 <div class="item-name">
                     ${escapeHTML(name)}
@@ -963,25 +960,27 @@ function updateReceipt(subtotal){
 }
 
 
+
 /* =========================
-   AMANKAN TEKS
+   ESCAPE HTML
 ========================= */
 
 function escapeHTML(text){
 
     return String(text)
 
-        .replace(/&/g,"&amp;")
+    .replace(/&/g,"&amp;")
 
-        .replace(/</g,"&lt;")
+    .replace(/</g,"&lt;")
 
-        .replace(/>/g,"&gt;")
+    .replace(/>/g,"&gt;")
 
-        .replace(/"/g,"&quot;")
+    .replace(/"/g,"&quot;")
 
-        .replace(/'/g,"&#039;");
+    .replace(/'/g,"&#039;");
 
 }
+
 
 
 /* =========================
@@ -997,8 +996,28 @@ async function downloadPDF(){
         document.getElementById("receipt");
 
 
+    /*
+       tunggu QRIS selesai dimuat
+    */
+
+    const qris =
+        document.querySelector(".qris-img");
+
+
+    if(qris && !qris.complete){
+
+        await new Promise(resolve=>{
+
+            qris.onload=resolve;
+            qris.onerror=resolve;
+
+        });
+
+    }
+
+
     await new Promise(resolve =>
-        setTimeout(resolve,100)
+        setTimeout(resolve,150)
     );
 
 
@@ -1007,24 +1026,19 @@ async function downloadPDF(){
             receipt,
             {
                 scale:3,
-
                 backgroundColor:"#ffffff",
-
                 useCORS:true,
-
                 logging:false
             }
         );
 
 
     /*
-       LEBAR NOTA = 80MM
-
-       TINGGI OTOMATIS
-       MENGIKUTI ISI NOTA
+       ukuran nota 80mm
+       tinggi otomatis mengikuti isi
     */
 
-    const imgWidth = 80;
+    const imgWidth=80;
 
 
     const ratio =
@@ -1059,9 +1073,7 @@ async function downloadPDF(){
 
     pdf.addImage(
 
-        canvas.toDataURL(
-            "image/png"
-        ),
+        canvas.toDataURL("image/png"),
 
         "PNG",
 
@@ -1079,6 +1091,10 @@ async function downloadPDF(){
 
     );
 
+
+    /*
+       nomor nota jadi nama file
+    */
 
     let number =
         document.getElementById("invoice")
@@ -1100,6 +1116,7 @@ async function downloadPDF(){
 }
 
 
+
 /* =========================
    INPUT REALTIME
 ========================= */
@@ -1116,6 +1133,7 @@ document
     );
 
 });
+
 
 
 /* =========================
