@@ -58,7 +58,8 @@ body:before{
     display:grid;
     place-items:center;
     border-radius:14px;
-    font-size:22px;
+    font-size:13px;
+    font-weight:800;
     background:linear-gradient(135deg,#6366f1,#8b5cf6);
     box-shadow:0 10px 30px #6366f144;
 }
@@ -179,10 +180,6 @@ input:focus{
     margin-bottom:8px;
 }
 
-.item input{
-    margin:0;
-}
-
 .delete{
     border:1px solid #ef444422;
     background:#ef444412;
@@ -205,7 +202,7 @@ input:focus{
     cursor:pointer;
 }
 
-.total-box{
+.summary{
     margin-top:20px;
     padding:18px;
     border-radius:16px;
@@ -213,15 +210,38 @@ input:focus{
     border:1px solid #ffffff08;
 }
 
-.total-row{
+.summary-row{
     display:flex;
     align-items:center;
     justify-content:space-between;
+    gap:10px;
+    margin-bottom:12px;
 }
 
-.total-label{
+.summary-row:last-child{
+    margin-bottom:0;
+}
+
+.summary-label{
     color:#94a3b8;
     font-size:12px;
+}
+
+.summary-value{
+    font-size:13px;
+    font-weight:700;
+}
+
+.discount-input{
+    width:130px;
+    padding:9px 11px;
+    text-align:right;
+}
+
+.total-row{
+    padding-top:14px;
+    margin-top:4px;
+    border-top:1px solid #ffffff0b;
 }
 
 .total-value{
@@ -230,6 +250,10 @@ input:focus{
     background:linear-gradient(90deg,#a5b4fc,#c084fc);
     -webkit-background-clip:text;
     color:transparent;
+}
+
+.discount-text{
+    color:#f87171;
 }
 
 .download{
@@ -295,6 +319,10 @@ input:focus{
     word-break:break-word;
 }
 
+.discount-receipt{
+    color:#000;
+}
+
 .qris-box{
     text-align:center;
     margin-top:12px;
@@ -353,6 +381,10 @@ input:focus{
     .item{
         grid-template-columns:1fr 58px 105px 40px;
     }
+
+    .discount-input{
+        width:115px;
+    }
 }
 </style>
 </head>
@@ -381,7 +413,7 @@ FOTO NOTA • JPG
 </header>
 
 
-<!-- INFORMASI NOTA -->
+<!-- INFORMASI -->
 
 <div class="card">
 
@@ -392,7 +424,6 @@ FOTO NOTA • JPG
 <h2>Informasi Nota</h2>
 
 </div>
-
 
 <div class="grid">
 
@@ -485,11 +516,48 @@ onclick="addItem()">
 </button>
 
 
-<div class="total-box">
+<!-- RINGKASAN -->
 
-<div class="total-row">
+<div class="summary">
 
-<span class="total-label">
+<div class="summary-row">
+
+<span class="summary-label">
+SUBTOTAL
+</span>
+
+<span
+class="summary-value"
+id="subtotal">
+
+Rp0
+
+</span>
+
+</div>
+
+
+<div class="summary-row">
+
+<span class="summary-label">
+DISKON
+</span>
+
+<input
+id="discount"
+class="discount-input"
+type="number"
+min="0"
+value="0"
+placeholder="0"
+oninput="calculate()">
+
+</div>
+
+
+<div class="summary-row total-row">
+
+<span class="summary-label">
 TOTAL PEMBAYARAN
 </span>
 
@@ -525,9 +593,7 @@ NotaKu • nota otomatis &amp; rapi
 
 
 
-<!-- =========================
-     NOTA FOTO
-========================= -->
+<!-- NOTA -->
 
 <div id="receipt">
 
@@ -564,6 +630,20 @@ DOKEN STORE
 
 <span id="rSubtotal">
 Rp0
+</span>
+
+</div>
+
+
+<div style="height:5px"></div>
+
+
+<div class="receipt-item discount-receipt">
+
+<span>Diskon</span>
+
+<span id="rDiscount">
+-Rp0
 </span>
 
 </div>
@@ -624,7 +704,7 @@ TERIMA KASIH
 
 <script>
 
-/* TANGGAL OTOMATIS */
+/* TANGGAL */
 
 function setToday(){
 
@@ -646,8 +726,6 @@ function setToday(){
 
 setToday();
 
-
-/* ELEMENT */
 
 const itemsBox=
 document.getElementById("items");
@@ -719,6 +797,7 @@ function calculate(){
 
     let subtotal=0;
 
+
     document
     .querySelectorAll(".item")
     .forEach(row=>{
@@ -738,20 +817,52 @@ function calculate(){
     });
 
 
-    document.getElementById("total")
+    let discount=
+        Number(
+            document.getElementById("discount").value
+        )||0;
+
+
+    /* diskon gak boleh lebih besar dari subtotal */
+
+    if(discount>subtotal){
+        discount=subtotal;
+    }
+
+
+    const total=
+        subtotal-discount;
+
+
+    document.getElementById("subtotal")
     .textContent=
         rupiah(subtotal);
 
-    updateReceipt(subtotal);
+
+    document.getElementById("total")
+    .textContent=
+        rupiah(total);
+
+
+    updateReceipt(
+        subtotal,
+        discount,
+        total
+    );
 }
 
 
 /* UPDATE NOTA */
 
-function updateReceipt(subtotal){
+function updateReceipt(
+    subtotal,
+    discount,
+    total
+){
 
     document.getElementById("rStore")
-    .textContent="DOKEN STORE";
+    .textContent=
+        "DOKEN STORE";
 
 
     document.getElementById("rInvoice")
@@ -850,9 +961,14 @@ function updateReceipt(subtotal){
         rupiah(subtotal);
 
 
+    document.getElementById("rDiscount")
+    .textContent=
+        "-"+rupiah(discount);
+
+
     document.getElementById("rTotal")
     .textContent=
-        rupiah(subtotal);
+        rupiah(total);
 }
 
 
@@ -870,14 +986,16 @@ function escapeHTML(text){
 }
 
 
-/* SIMPAN FOTO */
+/* SIMPAN JPG */
 
 async function saveImage(){
 
     calculate();
 
+
     const receipt=
         document.getElementById("receipt");
+
 
     const qris=
         document.querySelector(".qris-img");
